@@ -1,0 +1,29 @@
+{
+  "name": "avoo/achievement-bundle",
+  "type": "symfony-bundle",
+  "description": "Achievement bundle",
+  "license": "MIT",
+  "require": {
+    "php": ">=5.5.9"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
+  "authors": [
+    {
+      "name": "Jérémy Jégou",
+      "email": "jejevovo@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "Avoo\\AchievementBundle\\" : ""
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.1-dev"
+    }
+  }
+}
