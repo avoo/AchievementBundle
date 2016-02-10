@@ -28,6 +28,11 @@ class Achievement implements AchievementInterface
     protected $name;
 
     /**
+     * @var float $value
+     */
+    protected $value;
+
+    /**
      * @var string $event
      */
     protected $event;
@@ -38,9 +43,17 @@ class Achievement implements AchievementInterface
     protected $method;
 
     /**
-     * @var \DateTime $completeAt
+     * @var boolean $enabled
      */
-    protected $completeAt;
+    protected $enabled;
+
+    /**
+     * Construct
+     */
+    public function __construct()
+    {
+        $this->enabled = 1;
+    }
 
     /**
      * Get getId
@@ -91,6 +104,24 @@ class Achievement implements AchievementInterface
     /**
      * {@inheritdoc}
      */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setEvent($eventName)
     {
         $this->event = $eventName;
@@ -122,5 +153,23 @@ class Achievement implements AchievementInterface
     public function getMethod()
     {
         return $this->method;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
     }
 }

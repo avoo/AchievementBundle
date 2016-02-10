@@ -42,6 +42,22 @@ interface AchievementInterface
     public function getName();
 
     /**
+     * Set value
+     *
+     * @param float $value
+     *
+     * @return $this
+     */
+    public function setValue($value);
+
+    /**
+     * Get value
+     *
+     * @return float
+     */
+    public function getValue();
+
+    /**
      * Set event name
      *
      * @param string $eventName
@@ -72,4 +88,20 @@ interface AchievementInterface
      * @return string
      */
     public function getMethod();
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     *
+     * @return $this
+     */
+    public function setEnabled($enabled);
+
+    /**
+     * Is enabled
+     *
+     * @return boolean
+     */
+    public function isEnabled();
 }

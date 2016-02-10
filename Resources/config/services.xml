@@ -3,4 +3,15 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="avoo_achievement.achievement.class">Avoo\AchievementBundle\Achievement</parameter>
+    </parameters>
+
+    <services>
+        <service id="avoo_achievement.achievement.default" class="%avoo_achievement.achievement.class%">
+            <argument type="service" id="security.token_storage" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+    </services>
 </container>

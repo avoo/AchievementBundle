@@ -1,6 +1,7 @@
 <?php
 
 namespace Avoo\AchievementBundle\Model;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class CategoryInterface
@@ -24,4 +25,45 @@ interface CategoryInterface
      * @return string
      */
     public function getName();
+
+    /**
+     * Get achievements associated with this category
+     *
+     * @return ArrayCollection[AchievementInterface]
+     */
+    public function getAchievements();
+
+    /**
+     * Does a achievement belongs to category?
+     *
+     * @param AchievementInterface $achievement
+     *
+     * @return Boolean
+     */
+    public function hasAchievement(AchievementInterface $achievement);
+
+    /**
+     * Is there any achievements in category?
+     *
+     * @return bool
+     */
+    public function hasAchievements();
+
+    /**
+     * Add a achievement to category
+     *
+     * @param AchievementInterface $achievement
+     *
+     * @return $this
+     */
+    public function addAchievement(AchievementInterface $achievement);
+
+    /**
+     * Remove achievement from category
+     *
+     * @param AchievementInterface $achievement
+     *
+     * @return $this
+     */
+    public function removeAchievement(AchievementInterface $achievement);
 }

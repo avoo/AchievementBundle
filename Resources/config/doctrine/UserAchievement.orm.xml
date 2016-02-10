@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Avoo\AchievementBundle\Entity\UserAchievement">
+        <!--<id name="achievement" association-key="true">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <id name="user" association-key="true">
+            <generator strategy="AUTO"/>
+        </id>-->
+
+        <field name="progress" type="float" column="progress" />
+        <field name="completeAt" type="date" column="complete_at" />
+
+        <!--<many-to-one target-entity="AppBundle\Entity\Achievement" field="achievement">
+            <join-column name="achievement_id" nullable="false" />
+        </many-to-one>
+
+        <many-to-one target-entity="AppBundle\Entity\User" field="user">
+            <join-column name="user_id" nullable="false" />
+        </many-to-one>-->
+    </mapped-superclass>
+
+</doctrine-mapping>
