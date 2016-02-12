@@ -19,6 +19,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('avoo_achievement');
 
         $this->addServicesSection($rootNode);
+        $this->addAchievementsSection($rootNode);
 
         return $treeBuilder;
     }
@@ -37,6 +38,32 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('class')->defaultValue('avoo_achievement.achievement.default')->end()
+                    ->end()
+                ->end()
+            ->end();
+    }
+
+    /**
+     * Adds achievements section.
+     *
+     * @param ArrayNodeDefinition $node
+     */
+    public function addAchievementsSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->arrayNode('achievements')
+                    ->useAttributeAsKey('category')
+                    ->prototype('array')
+                        ->useAttributeAsKey('achievement')
+                        ->prototype('array')
+                            ->children()
+                                ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
+                                ->scalarNode('name')->isRequired()->cannotBeEmpty()->end()
+                                ->scalarNode('value')->isRequired()->cannotBeEmpty()->end()
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
             ->end();

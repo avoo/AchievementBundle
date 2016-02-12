@@ -10,18 +10,18 @@ namespace Avoo\AchievementBundle\Model;
 interface UserAchievementInterface
 {
     /**
-     * Set achievement
+     * Set achievement key
      *
-     * @param AchievementInterface $achievement
+     * @param string $achievement
      *
      * @return $this
      */
-    public function setAchievement(AchievementInterface $achievement);
+    public function setAchievement($achievement);
 
     /**
-     * Get achievement
+     * Get achievement key
      *
-     * @return AchievementInterface
+     * @return string
      */
     public function getAchievement();
 

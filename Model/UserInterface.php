@@ -12,7 +12,7 @@ interface UserInterface
     /**
      * Get achievements
      *
-     * @return AchievementInterface[]
+     * @return array
      */
     public function getAchievements();
 }

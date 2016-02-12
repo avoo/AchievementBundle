@@ -16,11 +16,7 @@
         <field name="progress" type="float" column="progress" />
         <field name="completeAt" type="date" column="complete_at" />
 
-        <!--<many-to-one target-entity="AppBundle\Entity\Achievement" field="achievement">
-            <join-column name="achievement_id" nullable="false" />
-        </many-to-one>
-
-        <many-to-one target-entity="AppBundle\Entity\User" field="user">
+        <!--<many-to-one target-entity="AppBundle\Entity\User" field="user">
             <join-column name="user_id" nullable="false" />
         </many-to-one>-->
     </mapped-superclass>

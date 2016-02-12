@@ -2,7 +2,6 @@
 
 namespace Avoo\AchievementBundle\Entity;
 
-use Avoo\AchievementBundle\Model\AchievementInterface;
 use Avoo\AchievementBundle\Model\UserAchievementInterface;
 use Avoo\AchievementBundle\Model\UserInterface;
 
@@ -14,7 +13,7 @@ use Avoo\AchievementBundle\Model\UserInterface;
 abstract class UserAchievement implements UserAchievementInterface
 {
     /**
-     * @var AchievementInterface
+     * @var string $achievement
      */
     protected $achievement;
 
@@ -34,9 +33,17 @@ abstract class UserAchievement implements UserAchievementInterface
     protected $completeAt;
 
     /**
+     * Construct
+     */
+    public function __construct()
+    {
+        $this->progress = 0;
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function setAchievement(AchievementInterface $achievement)
+    public function setAchievement($achievement)
     {
         $this->$achievement = $achievement;
 

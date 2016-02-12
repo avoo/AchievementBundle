@@ -2,11 +2,12 @@
 
 namespace Avoo\AchievementBundle;
 
-use Avoo\AchievementBundle\Model\AchievementInterface;
-use Avoo\AchievementBundle\Model\CategoryInterface;
+use Avoo\AchievementBundle\Checker\AchievementCheckerLocatorInterface;
+use Avoo\AchievementBundle\Listener\AchievementListenerInterface;
 use Avoo\AchievementBundle\Model\UserInterface;
-use Avoo\AchievementBundle\Repository\AchievementRepository;
+use Avoo\AchievementBundle\Repository\UserAchievementRepository;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
@@ -17,7 +18,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class Achievement
 {
     /**
-     * @var AchievementRepository $manager
+     * @var UserAchievementRepository $repository
      */
     protected $repository;
 
@@ -27,53 +28,108 @@ class Achievement
     protected $user;
 
     /**
+     * @var AchievementCheckerLocatorInterface $checkerLocator
+     */
+    protected $checkerLocator;
+
+    /**
      * Construct
      *
-     * @param TokenStorageInterface $security
-     * @param EntityManager         $manager
+     * @param TokenStorageInterface              $security
+     * @param EntityManager                      $manager
+     * @param AchievementCheckerLocatorInterface $checkerLocator
      */
-    public function __construct(TokenStorageInterface $security, EntityManager $manager)
-    {
+    public function __construct(
+        TokenStorageInterface $security,
+        EntityManager $manager,
+        AchievementCheckerLocatorInterface $checkerLocator
+    ) {
         if (null !== $token = $security->getToken()) {
             $this->user = $token->getUser();
         }
 
-        $this->repository = $manager->getRepository('AvooAchievementBundle:Achievement');
+        $this->repository = $manager->getRepository('AvooAchievementBundle:UserAchievement');
+        $this->checkerLocator = $checkerLocator;
+    }
+
+    /**
+     * Get achievement listener by key
+     *
+     * @param string $name
+     *
+     * @return AchievementListenerInterface
+     */
+    public function get($name)
+    {
+        return $this->checkerLocator->get($name);
     }
 
     /**
      * Get all achievements by category
      *
-     * @param CategoryInterface|null $category
+     * @param string|null $category
      *
-     * @return AchievementInterface[]
+     * @return array
      */
-    public function getAll(CategoryInterface $category = null)
+    public function getAll($category = null)
     {
-        return $this->repository->getAchievements($category);
+        $types = $this->checkerLocator->getTypes();
+
+        if (!is_null($category)) {
+            $typesTmp = array();
+            foreach ($types as $type) {
+                if (false !== strpos($type, $category)) {
+                    $typesTmp[] = $type;
+                }
+            }
+
+            return $typesTmp;
+        }
+
+        return $types;
     }
 
     /**
      * Get locked achievements
      *
-     * @param UserInterface $user
-     *
-     * @return AchievementInterface[]
+     * @return array
      */
-    public function getLockedAchievements(UserInterface $user)
+    public function getLockedAchievements()
     {
-        return $this->repository->getLockedAchievements($user);
+        if (!$this->user instanceof UserInterface) {
+            return array();
+        }
+
+        return $this->repository->getLockedAchievements($this->user);
     }
 
     /**
      * Get unlocked achievements
      *
-     * @param UserInterface $user
-     *
-     * @return AchievementInterface[]
+     * @return array
      */
-    public function getUnlockedAchievements(UserInterface $user)
+    public function getUnlockedAchievements()
     {
-        return $this->repository->getUnlockedAchievements($user);
+        if (!$this->user instanceof UserInterface) {
+            return array();
+        }
+
+        return $this->repository->getUnlockedAchievements($this->user);
+    }
+
+    public function progress($name, $value)
+    {
+        $event = $this->checkerLocator->get($name);
+    }
+
+    public function verify($name, $object = null)
+    {
+        /** @var AchievementListenerInterface $event */
+        $event = $this->checkerLocator->get($name);
+        $event->verify($object);
+
+        if ($event->isComplete()) {
+
+        }
     }
 }
