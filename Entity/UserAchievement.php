@@ -13,6 +13,13 @@ use Avoo\AchievementBundle\Model\UserInterface;
 abstract class UserAchievement implements UserAchievementInterface
 {
     /**
+     * Get id
+     *
+     * @var integer
+     */
+    protected $id;
+
+    /**
      * @var string $achievement
      */
     protected $achievement;
@@ -40,12 +47,16 @@ abstract class UserAchievement implements UserAchievementInterface
         $this->progress = 0;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
     /**
      * {@inheritdoc}
      */
     public function setAchievement($achievement)
     {
-        $this->$achievement = $achievement;
+        $this->achievement = $achievement;
 
         return $this;
     }

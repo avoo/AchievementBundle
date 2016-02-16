@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->children()
+                ->scalarNode('user_achievement_class')->isRequired()->cannotBeEmpty()->end()
                 ->arrayNode('service')
                     ->addDefaultsIfNotSet()
                     ->children()

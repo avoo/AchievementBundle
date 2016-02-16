@@ -28,18 +28,27 @@ class AvooAchievementExtension extends Extension
         $loader->load('services.xml');
 
         $container->setAlias('avoo_achievement', $config['service']['class']);
+        $container->setParameter('avoo_achievement.repository', $config['user_achievement_class']);
 
         foreach ($config['achievements'] as $category => $achievements) {
             foreach ($achievements as $type => $achievement) {
                 $definition = new Definition();
                 $definition->setClass($achievement['class']);
                 $definition->setArguments(array(
+                    'id' => $category . '.' . $type,
                     'category' => $category,
                     'name' => $achievement['name'],
                     'value' => $achievement['value'],
-                    'user' => new Reference('security.token_storage'),
+                    'manager' => new Reference('doctrine.orm.default_entity_manager')
                 ));
+
+                $definition->setMethodCalls(array(
+                    array('setUser', array(new Reference('security.token_storage'))),
+                    array('setRepository', array($config['user_achievement_class'])),
+                ));
+
                 $definition->addTag('avoo_achievement.achievement', array('type' => $category . '.' . $type));
+
                 $container->setDefinition(sprintf('avoo_achievement.achievement.%s.%s', $category, $type), $definition);
             }
         }

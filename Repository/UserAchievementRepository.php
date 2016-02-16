@@ -2,8 +2,10 @@
 
 namespace Avoo\AchievementBundle\Repository;
 
+use Avoo\AchievementBundle\Model\UserAchievementInterface;
 use Avoo\AchievementBundle\Model\UserInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * Class UserAchievementRepository
@@ -12,6 +14,32 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserAchievementRepository extends EntityRepository
 {
+    /**
+     * Get achievement
+     *
+     * @param string             $id
+     * @param UserInterface|null $user
+     *
+     * @return UserAchievementInterface|null
+     * @throws NonUniqueResultException
+     */
+    public function getAchievement($id, $user = null)
+    {
+        if (is_null($user)) {
+            return null;
+        }
+
+        $achievement = $this->createQueryBuilder('a')
+            ->where('a.achievement = :achievement')
+            ->andWhere('a.user = :user')
+            ->setParameter('achievement', $id)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $achievement;
+    }
+
     /**
      * Get locked achievements
      *

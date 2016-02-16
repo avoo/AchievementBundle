@@ -5,7 +5,6 @@ namespace Avoo\AchievementBundle;
 use Avoo\AchievementBundle\Checker\AchievementCheckerLocatorInterface;
 use Avoo\AchievementBundle\Listener\AchievementListenerInterface;
 use Avoo\AchievementBundle\Model\UserInterface;
-use Avoo\AchievementBundle\Repository\UserAchievementRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -17,11 +16,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 class Achievement
 {
-    /**
-     * @var UserAchievementRepository $repository
-     */
-    protected $repository;
-
     /**
      * @var UserInterface|null $user
      */
@@ -48,7 +42,6 @@ class Achievement
             $this->user = $token->getUser();
         }
 
-        $this->repository = $manager->getRepository('AvooAchievementBundle:UserAchievement');
         $this->checkerLocator = $checkerLocator;
     }
 
@@ -69,67 +62,68 @@ class Achievement
      *
      * @param string|null $category
      *
-     * @return array
+     * @return AchievementListenerInterface[]
      */
     public function getAll($category = null)
     {
-        $types = $this->checkerLocator->getTypes();
+        $achievements = array_merge($this->getLockedAchievements($category), $this->getUnlockedAchievements($category));
 
-        if (!is_null($category)) {
-            $typesTmp = array();
-            foreach ($types as $type) {
-                if (false !== strpos($type, $category)) {
-                    $typesTmp[] = $type;
-                }
-            }
-
-            return $typesTmp;
-        }
-
-        return $types;
+        return $achievements;
     }
 
     /**
      * Get locked achievements
      *
-     * @return array
+     * @param string|null $category
+     *
+     * @return AchievementListenerInterface[]
      */
-    public function getLockedAchievements()
+    public function getLockedAchievements($category = null)
     {
-        if (!$this->user instanceof UserInterface) {
-            return array();
+        $achievements = array();
+        foreach ($this->checkerLocator->getTypes() as $achievement) {
+            $listener = $this->get($achievement);
+
+            if (!is_null($category) && $listener->getCategory() !== $category || is_null($listener->getUserAchievement())
+            ) {
+                continue;
+            }
+
+            if (is_null($listener->getUserAchievement()->getCompleteAt())) {
+                $achievements[] = $listener;
+            }
         }
 
-        return $this->repository->getLockedAchievements($this->user);
+        return $achievements;
     }
 
     /**
      * Get unlocked achievements
      *
-     * @return array
+     * @param string|null $category
+     *
+     * @return AchievementListenerInterface[]
      */
-    public function getUnlockedAchievements()
+    public function getUnlockedAchievements($category = null)
     {
         if (!$this->user instanceof UserInterface) {
             return array();
         }
 
-        return $this->repository->getUnlockedAchievements($this->user);
-    }
+        $achievements = array();
+        foreach ($this->checkerLocator->getTypes() as $achievement) {
+            $listener = $this->get($achievement);
 
-    public function progress($name, $value)
-    {
-        $event = $this->checkerLocator->get($name);
-    }
+            if (!is_null($category) && $listener->getCategory() !== $category || is_null($listener->getUserAchievement())
+            ) {
+                continue;
+            }
 
-    public function verify($name, $object = null)
-    {
-        /** @var AchievementListenerInterface $event */
-        $event = $this->checkerLocator->get($name);
-        $event->verify($object);
-
-        if ($event->isComplete()) {
-
+            if(!is_null($listener->getUserAchievement()->getCompleteAt())) {
+                $achievements[] = $listener;
+            }
         }
+
+        return $achievements;
     }
 }
