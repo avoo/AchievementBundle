@@ -41,26 +41,46 @@ class UserAchievementRepository extends EntityRepository
     }
 
     /**
-     * Get locked achievements
+     * Get latest achievements unlocked
      *
      * @param UserInterface $user
+     * @param integer       $limit
      *
-     * @return array
+     * @return UserAchievementInterface[]
+     * @throws NonUniqueResultException
      */
-    public function getLockedAchievements(UserInterface $user)
+    public function getLatestAchievement(UserInterface $user, $limit = 1)
     {
+        $achievements = $this->createQueryBuilder('a')
+            ->andWhere('a.user = :user')
+            ->andWhere('a.completeAt IS NOT NULL')
+            ->orderBy('a.completeAt', 'DESC')
+            ->setParameter('user', $user)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
 
+        return $achievements;
     }
 
     /**
-     * Get unlocked achievements
+     * Get achievements in progress
      *
      * @param UserInterface $user
+     * @param string        $order
      *
-     * @return array
+     * @return UserAchievementInterface[]
      */
-    public function getUnlockedAchievements(UserInterface $user)
+    public function getInProgressAchievements(UserInterface $user, $order = 'DESC')
     {
+        $achievements = $this->createQueryBuilder('a')
+            ->andWhere('a.user = :user')
+            ->andWhere('a.completeAt IS NULL')
+            ->orderBy('a.progress', $order)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
 
+        return $achievements;
     }
 }

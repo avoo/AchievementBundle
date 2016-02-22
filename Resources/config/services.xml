@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="avoo_achievement.achievement.class">Avoo\AchievementBundle\Achievement</parameter>
+        <parameter key="avoo_achievement.options.class">Avoo\AchievementBundle\Listener\AchievementOptions</parameter>
         <parameter key="avoo_achievement.achievement_checker.class">Avoo\AchievementBundle\Checker\AchievementCheckerLocator</parameter>
     </parameters>
 
@@ -17,10 +18,14 @@
             </call>
         </service>
 
+        <service id="avoo_achievement.options" class="%avoo_achievement.options.class%" />
+
         <service id="avoo_achievement.achievement.default" class="%avoo_achievement.achievement.class%">
             <argument type="service" id="security.token_storage" />
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="avoo_achievement.locator.achievement_checker" />
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
+            <argument>%avoo_achievement.repository%</argument>
         </service>
     </services>
 </container>

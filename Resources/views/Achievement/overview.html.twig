@@ -1,0 +1,21 @@
+<div class="achievement_container">
+    <div class="achievement_content">
+        <div id="achievement_category_summary" class="category">
+    {%- if overview is defined %}
+        <div class="process process_overall">
+            <div class="bar" style="width: {{ overview['percent'] }}%"></div>
+            <div class="label">{{ 'achievements.earned_overall'|trans }}</div>
+            <div class="value">{{ overview['unlocked'] }} / {{ overview['total'] }}</div>
+        </div>
+    {%- else %}
+        {%- for category, earned in earnedByCategories %}
+        <div class="process process_{{ category }}">
+            <div class="bar" style="width: {{ earned['percent'] }}%"></div>
+            <div class="label">{{ ('achievements.category.' ~ category)|trans }}</div>
+            <div class="value">{{ earned['unlocked'] }} / {{ earned['total'] }}</div>
+        </div>
+        {%- endfor %}
+    {%- endif %}
+        </div>
+    </div>
+</div>

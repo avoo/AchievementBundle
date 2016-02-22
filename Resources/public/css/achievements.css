@@ -1,0 +1,73 @@
+.achievement_container .achievement_content {
+  width: 100%;
+  float: left;
+}
+
+.achievement_container .achievement_content .process {
+  border: 1px solid #EEEEEE;
+  height: 20px;
+  position: relative;
+  margin: 4px;
+}
+
+.achievement_container .achievement_content .bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 20px;
+    background: #A5C261;
+}
+
+.achievement_container .achievement_content .label {
+    position: absolute;
+    top: 0;
+    left: 4px;
+    line-height: 20px;
+}
+
+.achievement_container .achievement_content .value {
+    position: absolute;
+    right: 4px;
+    top: 0;
+    line-height: 20px;
+}
+
+.achievement_container .achievement_content .achievement {
+    position: relative;
+    border: 1px solid #EEEEEE;
+    height: 80px;
+    margin: 8px;
+}
+
+.achievement_content .achievement .title {
+        margin: 8px;
+        text-align: center;
+      }
+.achievement_content .achievement .description {
+        margin-left: 80px;
+        margin-right: 8px;
+      }
+.achievement_content .achievement .date {
+        text-align: right;
+        margin-right: 8px;
+      }
+.achievement_content .achievement .image {
+        position: absolute;
+        left: 8px;
+        top: 8px;
+        border: 1px solid #EEEEEE;
+        width: 64px;
+        height: 64px;
+      }
+
+.achievement_content .lockedAchievement {
+    position: relative;
+}
+
+.achievement_content .lockedAchievement .progress {
+    background: gray;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+}

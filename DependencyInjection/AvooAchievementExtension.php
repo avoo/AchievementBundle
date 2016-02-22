@@ -2,6 +2,7 @@
 
 namespace Avoo\AchievementBundle\DependencyInjection;
 
+use Avoo\AchievementBundle\Listener\AchievementOptions;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
@@ -34,15 +35,22 @@ class AvooAchievementExtension extends Extension
             foreach ($achievements as $type => $achievement) {
                 $definition = new Definition();
                 $definition->setClass($achievement['class']);
+
                 $definition->setArguments(array(
+                    'manager' => new Reference('doctrine.orm.default_entity_manager')
+                ));
+
+                $options = new Definition('Avoo\AchievementBundle\Listener\AchievementOptions', array(array(
                     'id' => $category . '.' . $type,
                     'category' => $category,
                     'name' => $achievement['name'],
                     'value' => $achievement['value'],
-                    'manager' => new Reference('doctrine.orm.default_entity_manager')
-                ));
+                    'description' => isset($achievement['description']) ? $achievement['description'] : null,
+                    'image' => $achievement['image']
+                )));
 
                 $definition->setMethodCalls(array(
+                    array('setOptions', array($options)),
                     array('setUser', array(new Reference('security.token_storage'))),
                     array('setRepository', array($config['user_achievement_class'])),
                 ));

@@ -1,0 +1,11 @@
+<div class="achievement_container">
+    <div class="achievement_categories">
+        <ul>
+            {%- for category in categories %}
+            <li id="achievement_menu_{{ category }}" class="achievement_menu">
+                <div>{{ ('achievements.category.' ~ category)|trans }}</div>
+            </li>
+            {%- endfor %}
+        </ul>
+    </div>
+</div>

@@ -3,6 +3,7 @@
 namespace Avoo\AchievementBundle\Listener;
 
 use Avoo\AchievementBundle\Model\UserAchievementInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class AchievementListenerInterface
@@ -11,6 +12,34 @@ use Avoo\AchievementBundle\Model\UserAchievementInterface;
  */
 interface AchievementListenerInterface
 {
+    /**
+     * Set options
+     *
+     * @param AchievementOptionsInterface $options
+     */
+    public function setOptions(AchievementOptionsInterface $options);
+
+    /**
+     * Get achievement options
+     *
+     * @return AchievementOptionsInterface
+     */
+    public function getOptions();
+
+    /**
+     * Set user
+     *
+     * @param TokenStorageInterface $security
+     */
+    public function setUser(TokenStorageInterface $security);
+
+    /**
+     * Set repository
+     *
+     * @param string $repository
+     */
+    public function setRepository($repository);
+
     /**
      * Return current user achievement
      *
@@ -42,25 +71,4 @@ interface AchievementListenerInterface
      * @return boolean
      */
     public function isComplete();
-
-    /**
-     * Get achievement name
-     *
-     * @return string
-     */
-    public function getName();
-
-    /**
-     * Get category name
-     *
-     * @return string
-     */
-    public function getCategory();
-
-    /**
-     * Get value
-     *
-     * @return bool
-     */
-    public function getValue();
 }

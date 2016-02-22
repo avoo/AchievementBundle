@@ -15,9 +15,11 @@ interface AchievementCheckerLocatorInterface
     /**
      * Get Known checker types
      *
+     * @param string|null $category
+     *
      * @return string[]
      */
-    public function getTypes();
+    public function getTypes($category = null);
 
     /**
      * Is template checker of type $type known?

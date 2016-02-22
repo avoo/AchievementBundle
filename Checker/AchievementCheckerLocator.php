@@ -66,8 +66,20 @@ class AchievementCheckerLocator implements AchievementCheckerLocatorInterface
     /**
      * {@inheritdoc}
      */
-    public function getTypes()
+    public function getTypes($category = null)
     {
-        return array_keys($this->checkers);
+        $excludes = array();
+        if (!is_null($category)) {
+            foreach (array_keys($this->checkers) as $checker) {
+                $pos = stripos($checker, $category . '.');
+                if(false !== $pos && $pos == 0) {
+                    continue;
+                }
+
+                $excludes[] = $checker;
+            }
+        }
+
+        return  array_diff(array_keys($this->checkers), $excludes);
     }
 }

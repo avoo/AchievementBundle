@@ -63,6 +63,8 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
                                 ->scalarNode('name')->isRequired()->cannotBeEmpty()->end()
                                 ->scalarNode('value')->isRequired()->cannotBeEmpty()->end()
+                                ->scalarNode('description')->end()
+                                ->scalarNode('image')->defaultValue('bundles/avooachievement/images/unknown.png')->end()
                             ->end()
                         ->end()
                     ->end()

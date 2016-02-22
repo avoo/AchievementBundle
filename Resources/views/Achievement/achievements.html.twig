@@ -1,0 +1,20 @@
+<div class="achievement_container">
+    <div class="achievement_content">
+        {%- if category is defined %}
+        <h2 class="latest_achievements">{{ ('achievements.category.' ~ category)|trans }}</h2>
+        {%- endif %}
+        {%- for achievement in achievements %}
+        <div class="achievement lockedAchievement">
+            <div class="title">{{ achievement.options.name }}</div>
+            <div class="description">{{ achievement.options.description }}</div>
+            {%- if achievement.userAchievement.completeAt is not null %}
+            <div class="date">{{ achievement.userAchievement.completeAt|date('d-m-Y') }}</div>
+            {%- endif %}
+            <div class="image" style="background-image: url('{{ asset(achievement.options.image) }}')"></div>
+            {%- if achievement.userAchievement.completeAt is null %}
+            <div class="progress" style="width: {{ achievement.userAchievement.progress/achievement.options.value *100 }}%"></div>
+            {%- endif %}
+        </div>
+        {%- endfor %}
+    </div>
+</div>

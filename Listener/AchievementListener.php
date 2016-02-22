@@ -16,24 +16,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 abstract class AchievementListener implements AchievementListenerInterface
 {
     /**
-     * @var string $id
+     * @var AchievementOptionsInterface $options
      */
-    protected $id;
-
-    /**
-     * @var string $category
-     */
-    protected $category;
-
-    /**
-     * @var string $name
-     */
-    protected $name;
-
-    /**
-     * @var float $value
-     */
-    protected $value;
+    protected $options;
 
     /**
      * @var UserAchievementInterface $userAchievement
@@ -63,21 +48,32 @@ abstract class AchievementListener implements AchievementListenerInterface
     /**
      * Construct
      *
-     * @param string        $id
-     * @param string        $category
-     * @param string        $name
-     * @param boolean       $value
      * @param EntityManager $manager
      */
-    public function __construct($id, $category, $name, $value, EntityManager $manager)
+    public function __construct(EntityManager $manager)
     {
-        $this->id = $id;
-        $this->category = $category;
-        $this->name = $name;
-        $this->value = $value;
         $this->manager = $manager;
     }
 
+    /**
+     * Set options
+     *
+     * @param AchievementOptionsInterface $options
+     */
+    public function setOptions(AchievementOptionsInterface $options)
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * Get achievement options
+     *
+     * @return AchievementOptionsInterface
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
 
     /**
      * Set user
@@ -103,10 +99,10 @@ abstract class AchievementListener implements AchievementListenerInterface
             $this->repository = $this->manager->getRepository($repository);
             $className = $this->repository->getClassName();
             $this->userAchievement = new $className;
-            $this->userAchievement->setAchievement($this->id);
+            $this->userAchievement->setAchievement($this->getOptions()->getId());
             $this->userAchievement->setUser($this->user);
 
-            $userAchievement = $this->repository->getAchievement($this->id, $this->user);
+            $userAchievement = $this->repository->getAchievement($this->getOptions()->getId(), $this->user);
 
             if (!is_null($userAchievement)) {
                 $this->userAchievement = $userAchievement;
@@ -144,8 +140,8 @@ abstract class AchievementListener implements AchievementListenerInterface
             return false;
         }
 
-        if (($progress = $this->userAchievement->getProgress() + $value) >= $this->value) {
-            $this->userAchievement->setProgress($this->value);
+        if (($progress = $this->userAchievement->getProgress() + $value) >= $this->getOptions()->getValue()) {
+            $this->userAchievement->setProgress($this->getOptions()->getValue());
             $this->userAchievement->setCompleteAt(new \DateTime());
             $this->isComplete = true;
         } else {
@@ -159,34 +155,12 @@ abstract class AchievementListener implements AchievementListenerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Is complete user achievement
+     *
+     * @return boolean
      */
     public function isComplete()
     {
         return $this->isComplete;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 }
