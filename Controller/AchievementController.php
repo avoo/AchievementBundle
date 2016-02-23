@@ -113,14 +113,16 @@ class AchievementController extends Controller
     /**
      * Get latest achievements earned
      *
+     * @param integer $limit
+     *
      * @return Response
      */
-    public function latestAction()
+    public function latestAction($limit = 1)
     {
         $achievement = $this->get('avoo_achievement');
 
         return $this->render('AvooAchievementBundle:Achievement:achievements.html.twig', array(
-            'achievements' => $achievement->getLatestAchievements(),
+            'achievements' => $achievement->getLatestAchievements($limit),
         ));
     }
 }

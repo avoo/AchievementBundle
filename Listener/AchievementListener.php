@@ -56,9 +56,7 @@ abstract class AchievementListener implements AchievementListenerInterface
     }
 
     /**
-     * Set options
-     *
-     * @param AchievementOptionsInterface $options
+     * {@inheritdoc}
      */
     public function setOptions(AchievementOptionsInterface $options)
     {
@@ -66,9 +64,7 @@ abstract class AchievementListener implements AchievementListenerInterface
     }
 
     /**
-     * Get achievement options
-     *
-     * @return AchievementOptionsInterface
+     * {@inheritdoc}
      */
     public function getOptions()
     {
@@ -76,9 +72,7 @@ abstract class AchievementListener implements AchievementListenerInterface
     }
 
     /**
-     * Set user
-     *
-     * @param TokenStorageInterface $security
+     * {@inheritdoc}
      */
     public function setUser(TokenStorageInterface $security)
     {
@@ -89,14 +83,31 @@ abstract class AchievementListener implements AchievementListenerInterface
     }
 
     /**
-     * Set repository
-     *
-     * @param string $repository
+     * {@inheritdoc}
      */
     public function setRepository($repository)
     {
         if (!is_null($this->user)) {
             $this->repository = $this->manager->getRepository($repository);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUserAchievement(UserAchievementInterface $userAchievement)
+    {
+        $this->userAchievement = $userAchievement;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserAchievement()
+    {
+        if (is_null($this->userAchievement)) {
             $className = $this->repository->getClassName();
             $this->userAchievement = new $className;
             $this->userAchievement->setAchievement($this->getOptions()->getId());
@@ -109,13 +120,7 @@ abstract class AchievementListener implements AchievementListenerInterface
                 $this->isComplete = !is_null($userAchievement->getCompleteAt()) ? true : false;
             }
         }
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getUserAchievement()
-    {
         return $this->userAchievement;
     }
 
@@ -128,11 +133,7 @@ abstract class AchievementListener implements AchievementListenerInterface
     }
 
     /**
-     * Progress
-     *
-     * @param float $value
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function progress($value)
     {
@@ -155,9 +156,7 @@ abstract class AchievementListener implements AchievementListenerInterface
     }
 
     /**
-     * Is complete user achievement
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isComplete()
     {

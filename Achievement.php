@@ -33,6 +33,11 @@ class Achievement
     protected $repository;
 
     /**
+     * @var array $categories
+     */
+    protected $categories;
+
+    /**
      * Construct
      *
      * @param TokenStorageInterface              $security
@@ -40,13 +45,15 @@ class Achievement
      * @param AchievementCheckerLocatorInterface $checkerLocator
      * @param EntityManager                      $manager
      * @param string                             $repository
+     * @param array                              $categories
      */
     public function __construct(
         TokenStorageInterface $security,
         EntityManager $manager,
         AchievementCheckerLocatorInterface $checkerLocator,
         EntityManager $manager,
-        $repository
+        $repository,
+        $categories
     ) {
         $token = $security->getToken();
         if (null !== $token && is_object($user = $token->getUser())) {
@@ -55,6 +62,7 @@ class Achievement
 
         $this->repository = $manager->getRepository($repository);
         $this->checkerLocator = $checkerLocator;
+        $this->categories = $categories;
     }
 
     /**
@@ -76,14 +84,7 @@ class Achievement
      */
     public function getCategories()
     {
-        $categories = array();
-        foreach ($this->checkerLocator->getTypes() as $achievement) {
-            $listener = $this->get($achievement);
-
-            $categories[] = $listener->getOptions()->getCategory();
-        }
-
-        return array_unique($categories);
+        return array_unique($this->categories);
     }
 
     /**
@@ -122,7 +123,9 @@ class Achievement
         $userAchievements = $this->repository->getLatestAchievement($this->user, $limit);
 
         foreach ($userAchievements as $userAchievement) {
-            $achievements[] = $this->checkerLocator->get($userAchievement->getAchievement());
+            $listener = $this->checkerLocator->get($userAchievement->getAchievement());
+            $listener->setUserAchievement($userAchievement);
+            $achievements[] = $listener;
         }
 
         return $achievements;
@@ -137,7 +140,7 @@ class Achievement
      */
     public function getAll($category = null)
     {
-        $achievements = array_merge($this->getLockedAchievements($category), $this->getUnlockedAchievements($category));
+        $achievements = array_merge($this->getUnlockedAchievements($category), $this->getLockedAchievements($category));
 
         return $achievements;
     }
@@ -152,8 +155,8 @@ class Achievement
     public function getLockedAchievements($category = null)
     {
         $tmp = array();
-        foreach ($this->checkerLocator->getTypes($category) as $achievement) {
-            $listener = $this->get($achievement);
+        foreach ($this->checkerLocator->getTypes($category) as $userAchievement) {
+            $listener = $this->get($userAchievement);
             $progress = $listener->getUserAchievement()->getProgress();
             $total = $listener->getOptions()->getValue();
 
@@ -184,10 +187,13 @@ class Achievement
             return array();
         }
 
-        $inProgress = $this->repository->getInProgressAchievements($this->user);
+        $types = $this->checkerLocator->getTypes();
+        $userAchievements = $this->repository->findAchievements($this->user, $types, false);
+
         $tmp = array();
-        foreach ($inProgress as $userAchievement) {
+        foreach ($userAchievements as $userAchievement) {
             $listener = $this->checkerLocator->get($userAchievement->getAchievement());
+            $listener->setUserAchievement($userAchievement);
             $progress = $listener->getUserAchievement()->getProgress();
             $total = $listener->getOptions()->getValue();
             $tmp[$listener->getOptions()->getId()] = (float) number_format($progress / $total * 100, 2);
@@ -218,12 +224,13 @@ class Achievement
         }
 
         $achievements = array();
-        foreach ($this->checkerLocator->getTypes($category) as $achievement) {
-            $listener = $this->get($achievement);
+        $types = $this->checkerLocator->getTypes($category);
+        $userAchievements = $this->repository->findAchievements($this->user, $types, true);
 
-            if(!is_null($listener->getUserAchievement()->getCompleteAt())) {
-                $achievements[] = $listener;
-            }
+        foreach ($userAchievements as $userAchievement) {
+            $listener = $this->get($userAchievement->getAchievement());
+            $listener->setUserAchievement($userAchievement);
+            $achievements[] = $listener;
         }
 
         return $achievements;

@@ -41,6 +41,36 @@ class UserAchievementRepository extends EntityRepository
     }
 
     /**
+     * Find achievements by id's
+     *
+     * @param UserInterface $user
+     * @param array         $ids
+     * @param boolean|null  $isComplete
+     *
+     * @return UserAchievementInterface[]
+     */
+    public function findAchievements(UserInterface $user, array $ids, $isComplete = null)
+    {
+        $query = $this->createQueryBuilder('a')
+            ->andWhere('a.user = :user')
+            ->andWhere('a.achievement IN (:ids)')
+            ->orderBy('a.completeAt', 'DESC')
+            ->setParameter('ids', $ids)
+            ->setParameter('user', $user);
+
+        if (true === $isComplete) {
+            $query->andWhere('a.completeAt IS NOT NULL');
+        } else if (false === $isComplete) {
+            $query->andWhere('a.completeAt IS NULL');
+        }
+
+        $achievements = $query->getQuery()
+            ->getResult();
+
+        return $achievements;
+    }
+
+    /**
      * Get latest achievements unlocked
      *
      * @param UserInterface $user
@@ -57,27 +87,6 @@ class UserAchievementRepository extends EntityRepository
             ->orderBy('a.completeAt', 'DESC')
             ->setParameter('user', $user)
             ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
-
-        return $achievements;
-    }
-
-    /**
-     * Get achievements in progress
-     *
-     * @param UserInterface $user
-     * @param string        $order
-     *
-     * @return UserAchievementInterface[]
-     */
-    public function getInProgressAchievements(UserInterface $user, $order = 'DESC')
-    {
-        $achievements = $this->createQueryBuilder('a')
-            ->andWhere('a.user = :user')
-            ->andWhere('a.completeAt IS NULL')
-            ->orderBy('a.progress', $order)
-            ->setParameter('user', $user)
             ->getQuery()
             ->getResult();
 

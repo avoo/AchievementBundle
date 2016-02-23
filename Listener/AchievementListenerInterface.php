@@ -41,6 +41,15 @@ interface AchievementListenerInterface
     public function setRepository($repository);
 
     /**
+     * Set user achievement
+     *
+     * @param UserAchievementInterface $userAchievement
+     *
+     * @return $this
+     */
+    public function setUserAchievement(UserAchievementInterface $userAchievement);
+
+    /**
      * Return current user achievement
      *
      * @return UserAchievementInterface

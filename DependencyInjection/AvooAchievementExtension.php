@@ -9,7 +9,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\Yaml\Parser;
 
 /**
  * Class AvooAchievementExtension
@@ -30,6 +29,13 @@ class AvooAchievementExtension extends Extension
 
         $container->setAlias('avoo_achievement', $config['service']['class']);
         $container->setParameter('avoo_achievement.repository', $config['user_achievement_class']);
+
+        $categories = array();
+        if(!empty($config['achievements'])) {
+            $categories = array_keys($config['achievements']);
+        };
+
+        $container->setParameter('avoo_achievement.categories', $categories);
 
         foreach ($config['achievements'] as $category => $achievements) {
             foreach ($achievements as $type => $achievement) {
