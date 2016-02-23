@@ -5,8 +5,8 @@
         {%- endif %}
         {%- for achievement in achievements %}
         <div class="achievement lockedAchievement">
-            <div class="title">{{ achievement.options.name }}</div>
-            <div class="description">{{ achievement.options.description }}</div>
+            <div class="title">{{ achievement.options.name|trans }}</div>
+            <div class="description">{{ achievement.options.description|trans }}</div>
             {%- if achievement.userAchievement.completeAt is not null %}
             <div class="date">{{ achievement.userAchievement.completeAt|date('d-m-Y') }}</div>
             {%- endif %}
