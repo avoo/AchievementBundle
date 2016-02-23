@@ -1,4 +1,4 @@
-EloBundle
+AchievementBundle
 =====================
 [![Build Status]
 (https://scrutinizer-ci.com/g/avoo/AchievementBundle/badges/build.png?b=master)](https://scrutinizer-ci.com/g/avoo/AchievementBundle/build-status/master)
@@ -13,11 +13,12 @@ Achievement bundle for Symfony 2
 
 * [Installation](#installation)
 * [Configuration](#default-configuration)
-* [Class implementation](#class-implementation)
-  - [Elo player class](#elo-player-class)
-  - [Elo versus class](#elo-versus-class)
-  - [User class](#user-class)
+* [User Achievement class](#user-achievement-class)
+* [Doctrine configuration](#doctrine-configuration)
+* [Achievement configuration](#achievement-configuration)
+* [Listener implementation](#listener-implementation)
 * [Default Usage](#default-usage)
+* [Default Progression](#default-progression)
 
 Installation
 ------------
@@ -222,7 +223,7 @@ avoo_achievement:
                 value: 50
 ```
 
-Class implementation
+Listener implementation
 --------------------
 
 #### Achievement listener example
