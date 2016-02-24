@@ -24,7 +24,6 @@
             <argument type="service" id="security.token_storage" />
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="avoo_achievement.locator.achievement_checker" />
-            <argument type="service" id="doctrine.orm.default_entity_manager"/>
             <argument>%avoo_achievement.repository%</argument>
             <argument>%avoo_achievement.categories%</argument>
         </service>

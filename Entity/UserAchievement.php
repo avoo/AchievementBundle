@@ -30,7 +30,7 @@ abstract class UserAchievement implements UserAchievementInterface
     protected $user;
 
     /**
-     * @var float $progress
+     * @var float|integer $progress
      */
     protected $progress;
 
@@ -47,6 +47,11 @@ abstract class UserAchievement implements UserAchievementInterface
         $this->progress = 0;
     }
 
+    /**
+     * Get id
+     *
+     * @return integer
+     */
     public function getId()
     {
         return $this->id;

@@ -7,7 +7,6 @@ use Avoo\AchievementBundle\Listener\AchievementListenerInterface;
 use Avoo\AchievementBundle\Model\UserInterface;
 use Avoo\AchievementBundle\Repository\UserAchievementRepository;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
@@ -43,7 +42,6 @@ class Achievement
      * @param TokenStorageInterface              $security
      * @param EntityManager                      $manager
      * @param AchievementCheckerLocatorInterface $checkerLocator
-     * @param EntityManager                      $manager
      * @param string                             $repository
      * @param array                              $categories
      */
@@ -51,7 +49,6 @@ class Achievement
         TokenStorageInterface $security,
         EntityManager $manager,
         AchievementCheckerLocatorInterface $checkerLocator,
-        EntityManager $manager,
         $repository,
         $categories
     ) {
