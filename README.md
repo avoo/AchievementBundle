@@ -330,7 +330,9 @@ Progress example:
 ``` php
 public function indexAction(Request $request)
 {
-    $this->get('avoo_achievement')->get('my_category.my_super_achievement')->progress(2);
+    $achievement = $this->get('avoo_achievement');
+
+    $achievement->get('my_category.my_super_achievement')->progress(2); // Return true or false
 }
 ```
 
@@ -338,11 +340,13 @@ Check if current achievement is earned:
 ``` php
 public function indexAction(Request $request)
 {
-    $this->get('avoo_achievement')->get('my_category.my_super_achievement')->isComplete();
+    $achievement = $this->get('avoo_achievement');
+
+    $achievement->get('my_category.my_super_achievement')->isComplete(); // Return true or false
 }
 ```
 
-Achievement validation, you can implement your ow, validation process with `isValid` function in your listener class:
+Achievement validation, you can implement your own validation process with `isValid` function in your listener class:
 ``` php
 namespace AppBundle\Listener;
 
