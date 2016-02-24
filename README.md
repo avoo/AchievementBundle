@@ -115,6 +115,63 @@ class UserAchievement extends BaseUserAchievement
 
 #### Doctrine configuration
 
+In the user class:
+
+**YML**
+
+``` yml
+# src/AppBundle/Resources/config/doctrine/User.orm.yml
+AppBundle\Entity\User:
+    type:  entity
+    oneToMany:
+        achievements:
+            targetEntity: AppBundle\Entity\UserAchievement
+            mappedBy: user
+```
+
+**XML**
+
+``` xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- src/AppBundle/Resources/config/doctrine/User.orm.xml -->
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="AppBundle\Entity\User" table="fos_user">
+        <one-to-many field="achievements" target-entity="AppBundle\Entity\UserAchievement" mapped-by="user" />
+    </entity>
+
+</doctrine-mapping>
+```
+
+**Annotation**
+
+``` php
+namespace Avoo\EloBundle\Entity;
+
+use Avoo\AchievementBundle\Model\UserInterface;
+use FOS\UserBundle\Model\User as BaseUser;
+use Doctrine\ORM\Mapping as ORM;
+
+class User extends BaseUser implement UserInterface
+{
+    /**
+     * @OneToMany(targetEntity="AppBundle\Entity\UserAchievement", mappedBy="user")
+     */
+    protected $achievements;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAchievements()
+    {
+        return $this->achievements;
+    }
+}
+```
+
 And now linked the user achievement class with your own user class.
 
 **YML**
