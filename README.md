@@ -56,8 +56,6 @@ You need to implement `Avoo\AchievementBundle\Model\UserInterface`, consider the
 for FOS example:
 
 ``` php
-<?php
-
 namespace AppBundle\Entity;
 
 use Avoo\AchievementBundle\Model\UserInterface;
@@ -93,8 +91,6 @@ class User extends BaseUser implements UserInterface
 **Class**
 
 ``` php
-<?php
-
 namespace AppBundle\Entity;
 
 use Avoo\AchievementBundle\Entity\UserAchievement as BaseUserAchievement;
@@ -286,8 +282,6 @@ Listener implementation
 #### Achievement listener example
 
 ``` php
-<?php
-
 namespace AppBundle\Listener;
 
 use Avoo\AchievementBundle\Listener\AchievementListener;
@@ -350,8 +344,6 @@ public function indexAction(Request $request)
 
 Achievement validation, you can implement your ow, validation process with `isValid` function in your listener class:
 ``` php
-<?php
-
 namespace AppBundle\Listener;
 
 use Avoo\AchievementBundle\Listener\AchievementListener;
@@ -384,8 +376,6 @@ public function indexAction(Request $request)
 
 Or override `progress` function:
 ``` php
-<?php
-
 namespace AppBundle\Listener;
 
 use Avoo\AchievementBundle\Listener\AchievementListener;
