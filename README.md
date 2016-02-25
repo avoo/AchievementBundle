@@ -186,6 +186,7 @@ AppBundle\Entity\UserAchievement:
     manyToOne:
         user:
             targetEntity: AppBundle\Entity\User
+            inversedBy: achievements
             joinColumn:
                 name: user_id
                 referencedColumnName: id
@@ -207,7 +208,7 @@ AppBundle\Entity\UserAchievement:
             <generator strategy="AUTO"/>
         </id>
 
-        <many-to-one target-entity="AppBundle\Entity\User" field="user">
+        <many-to-one target-entity="AppBundle\Entity\User" field="user" inversed-by="achievements">
             <join-column name="user_id" nullable="false" />
         </many-to-one>
     </entity>
@@ -233,7 +234,7 @@ class UserAchievement extends BaseUserAchievement
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\UserAchievement")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\UserAchievement", inversedBy="achievements")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
