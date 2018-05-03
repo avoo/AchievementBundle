@@ -2,7 +2,7 @@
 
 namespace Avoo\AchievementBundle\DependencyInjection;
 
-use Avoo\AchievementBundle\Listener\AchievementOptions;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
@@ -43,7 +43,7 @@ class AvooAchievementExtension extends Extension
                 $definition->setClass($achievement['class']);
 
                 $definition->setArguments(array(
-                    'manager' => new Reference('doctrine.orm.default_entity_manager')
+                    EntityManager::class => new Reference('doctrine.orm.default_entity_manager')
                 ));
 
                 $options = new Definition('Avoo\AchievementBundle\Listener\AchievementOptions', array(array(
