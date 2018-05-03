@@ -63,6 +63,12 @@ class AvooAchievementExtension extends Extension
 
                 $definition->addTag('avoo_achievement.achievement', array('type' => $category . '.' . $type));
 
+                /**
+                 * Set to be public, for Symfony 3.4+
+                 * @see: https://symfony.com/blog/new-in-symfony-3-4-services-are-private-by-default
+                 */
+                $definition->setPublic(true);
+
                 $container->setDefinition(sprintf('avoo_achievement.achievement.%s.%s', $category, $type), $definition);
             }
         }
