@@ -28,22 +28,22 @@ abstract class AchievementListener implements AchievementListenerInterface
     /**
      * @var UserInterface|null $user
      */
-    private $user;
+    protected $user;
 
     /**
      * @var UserAchievementRepository $repository
      */
-    private $repository;
+    protected $repository;
 
     /**
      * @var EntityManager $manager
      */
-    private $manager;
+    protected $manager;
 
     /**
      * @var bool $isComplete
      */
-    private $isComplete = false;
+    protected $isComplete = false;
 
     /**
      * Construct
