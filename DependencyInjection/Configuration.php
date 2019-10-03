@@ -15,8 +15,13 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('avoo_achievement');
+        $treeBuilder = new TreeBuilder('avoo_achievement');
+        if (\method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $rootNode = $treeBuilder->root('avoo_achievement');
+        }
 
         $this->addServicesSection($rootNode);
         $this->addAchievementsSection($rootNode);
